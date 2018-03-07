@@ -1,0 +1,69 @@
+/*
+  The MIT License (MIT)
+
+  Copyright (c) 2014-2017 Marc de Verdelhan & respective authors (see AUTHORS)
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy of
+  this software and associated documentation files (the "Software"), to deal in
+  the Software without restriction, including without limitation the rights to
+  use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+  the Software, and to permit persons to whom the Software is furnished to do so,
+  subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+  FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+  COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+  IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+using TA4Net.Extensions;
+using TA4Net.Interfaces;
+
+namespace TA4Net.Indicators.Statistics
+{
+    /**
+     * Correlation coefficient indicator.
+     * <p/>
+     * @apiNote Minimal deviations in last decimal places possible. During the calculations this indicator converts {@link decimal decimal/Bigdecimal} to double
+     * @see <a href="http://stockcharts.com/school/doku.php?id=chart_school:technical_indicators:correlation_coeffici">
+     * http://stockcharts.com/school/doku.php?id=chart_school:technical_indicators:correlation_coeffici</a>
+     */
+    public class CorrelationCoefficientIndicator : CachedIndicator<decimal>
+    {
+        private VarianceIndicator _variance1;
+        private VarianceIndicator _variance2;
+        private CovarianceIndicator _covariance;
+
+        /**
+         * Constructor.
+         * @param indicator1 the first indicator
+         * @param indicator2 the second indicator
+         * @param timeFrame the time frame
+         */
+        public CorrelationCoefficientIndicator(IIndicator<decimal> indicator1, IIndicator<decimal> indicator2, int timeFrame)
+            : base(indicator1)
+        {
+            _variance1 = new VarianceIndicator(indicator1, timeFrame);
+            _variance2 = new VarianceIndicator(indicator2, timeFrame);
+            _covariance = new CovarianceIndicator(indicator1, indicator2, timeFrame);
+        }
+
+        protected override decimal Calculate(int index)
+        {
+            decimal cov = _covariance.GetValue(index);
+            decimal var1 = _variance1.GetValue(index);
+            decimal var2 = _variance2.GetValue(index);
+            decimal var1_2_sqrt = var1.MultipliedBy(var2).Sqrt();
+            return cov.DividedBy(var1_2_sqrt);
+        }
+
+        public override string GetConfiguration()
+        {
+            return $" {GetType()}, CovarianceIndicator: {_covariance.GetConfiguration()}, Variance1Indicator: {_variance1.GetConfiguration()}, Vairance2Indicator: {_variance2.GetConfiguration()}";
+        }
+    }
+}

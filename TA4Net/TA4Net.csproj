@@ -2,6 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Company></Company>
+    <Description>Technical Analyses for trading, based on TA4J</Description>
+    <Copyright>MIT</Copyright>
+    <PackageProjectUrl>https://github.com/Taats/TA4Net</PackageProjectUrl>
+    <Authors>Taats</Authors>
+    <RepositoryUrl>https://github.com/Taats/TA4Net</RepositoryUrl>
+    <RepositoryType>Git</RepositoryType>
+    <PackageTags>Technical Analsys Trading TA4Net TA4J</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

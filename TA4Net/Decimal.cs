@@ -36,6 +36,7 @@ namespace TA4Net
     {
         /** Not-a-Number instance (infinite error) */
         public static decimal NaN = decimal.MaxValue;
+        public static readonly decimal MINUSONE = -1;
         public static readonly decimal Zero = 0;
         public static readonly decimal ONE = 1;
         public static readonly decimal TWO = 2;

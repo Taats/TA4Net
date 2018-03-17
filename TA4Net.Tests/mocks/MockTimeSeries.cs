@@ -36,31 +36,31 @@ namespace TA4Net.Mocks
     {
 
         public MockTimeSeries(params decimal[] data)
-            : base(decimalsToBars(data))
+            : base(DecimalsToBars(data))
         {
         }
 
-        public MockTimeSeries(List<IBar> bars)
+        public MockTimeSeries(IList<IBar> bars)
             : base(bars)
         {
         }
 
         public MockTimeSeries(decimal[] data, DateTime[] times)
-            : base(doublesAndTimesToBars(data, times))
+            : base(DoublesAndTimesToBars(data, times))
         {
         }
 
         public MockTimeSeries(params DateTime[] dates)
-            : base(timesToBars(dates))
+            : base(TimesToBars(dates))
         {
         }
 
         public MockTimeSeries()
-            : base(arbitraryBars())
+            : base(ArbitraryBars())
         {
         }
 
-        private static List<IBar> decimalsToBars(params decimal[] data)
+        private static List<IBar> DecimalsToBars(params decimal[] data)
         {
             List<IBar> bars = new List<IBar>();
             for (int i = 0; i < data.Length; i++)
@@ -70,7 +70,7 @@ namespace TA4Net.Mocks
             return bars;
         }
 
-        private static List<IBar> doublesAndTimesToBars(decimal[] data, DateTime[] times)
+        private static List<IBar> DoublesAndTimesToBars(decimal[] data, DateTime[] times)
         {
             if (data.Length != times.Length)
             {
@@ -84,7 +84,7 @@ namespace TA4Net.Mocks
             return bars;
         }
 
-        private static List<IBar> timesToBars(params DateTime[] dates)
+        private static List<IBar> TimesToBars(params DateTime[] dates)
         {
             List<IBar> bars = new List<IBar>();
             int i = 1;
@@ -95,7 +95,7 @@ namespace TA4Net.Mocks
             return bars;
         }
 
-        private static List<IBar> arbitraryBars()
+        private static List<IBar> ArbitraryBars()
         {
             List<IBar> bars = new List<IBar>();
             for (decimal i = 0M; i < 5000; i++)

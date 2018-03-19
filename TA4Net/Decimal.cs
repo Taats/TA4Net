@@ -41,6 +41,7 @@ namespace TA4Net
         public static readonly decimal ONE = 1;
         public static readonly decimal TWO = 2;
         public static readonly decimal THREE = 3;
+        public static readonly decimal FOUR = 4;
         public static readonly decimal TEN = 10;
         public static readonly decimal HUNDRED = 100;
         public static readonly decimal THOUSAND = 1000;

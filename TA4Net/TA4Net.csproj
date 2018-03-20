@@ -11,6 +11,7 @@
     <RepositoryUrl>https://github.com/Taats/TA4Net</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
     <PackageTags>Technical Analsys Trading TA4Net TA4J</PackageTags>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>

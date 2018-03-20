@@ -174,7 +174,7 @@ namespace TA4Net
             {
                 int start = Math.Max(startIndex, _seriesBeginIndex);
                 int end = Math.Min(endIndex, _seriesEndIndex + 1);
-                return new BaseTimeSeries(Name, cut(_bars, start, end));
+                return new BaseTimeSeries(Name, Cut(_bars, start, end));
             }
             return new BaseTimeSeries(_name);
 
@@ -195,19 +195,19 @@ namespace TA4Net
                 if (i < 0)
                 {
                     // Cannot return the i-th bar if i < 0
-                    throw new IndexOutOfRangeException(buildOutOfBoundsMessage(this, i));
+                    throw new IndexOutOfRangeException(BuildOutOfBoundsMessage(this, i));
                 }
                 // log.trace("Time series `{}` ({} bars): bar {} already removed, use {}-th instead", name, bars.Count, i, removedBarsCount);
                 if (_bars.isEmpty())
                 {
-                    throw new IndexOutOfRangeException(buildOutOfBoundsMessage(this, _removedBarsCount));
+                    throw new IndexOutOfRangeException(BuildOutOfBoundsMessage(this, _removedBarsCount));
                 }
                 innerIndex = 0;
             }
             else if (innerIndex >= _bars.Count)
             {
                 // Cannot return the n-th bar if n >= bars.Count
-                throw new IndexOutOfRangeException(buildOutOfBoundsMessage(this, i));
+                throw new IndexOutOfRangeException(BuildOutOfBoundsMessage(this, i));
             }
             return _bars[innerIndex];
         }
@@ -253,7 +253,7 @@ namespace TA4Net
                 throw new ArgumentException("Maximum bar count must be strictly positive");
             }
             _maximumBarCount = MaximumBarCount;
-            removeExceedingBars();
+            RemoveExceedingBars();
         }
 
 
@@ -293,7 +293,7 @@ namespace TA4Net
                 _seriesBeginIndex = 0;
             }
             _seriesEndIndex++;
-            removeExceedingBars();
+            RemoveExceedingBars();
         }
 
         /**
@@ -340,7 +340,7 @@ namespace TA4Net
         /**
          * Removes the N first bars which exceed the Maximum bar count.
          */
-        private void removeExceedingBars()
+        private void RemoveExceedingBars()
         {
             int barCount = _bars.Count;
             if (barCount > _maximumBarCount)
@@ -363,7 +363,7 @@ namespace TA4Net
          * @param endIndex end index of the subset
          * @return a new list of bars with tick from startIndex (inclusive) to endIndex (exclusive)
          */
-        private static List<IBar> cut(IList<IBar> bars, int startIndex, int endIndex)
+        private static List<IBar> Cut(IList<IBar> bars, int startIndex, int endIndex)
         {
             return new List<IBar>(bars.Skip(startIndex).Take(endIndex - startIndex));
         }
@@ -373,7 +373,7 @@ namespace TA4Net
          * @param index an out of bounds bar index
          * @return a message for an OutOfBoundsException
          */
-        private static string buildOutOfBoundsMessage(BaseTimeSeries series, int index)
+        private static string BuildOutOfBoundsMessage(BaseTimeSeries series, int index)
         {
             //return "Size of series: " + series.bars.Count + " bars, "
             //        + series.RemoveAtdBarsCount + " bars removed, index = " + index;

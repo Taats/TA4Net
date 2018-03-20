@@ -60,7 +60,7 @@ namespace TA4Net
          */
         public BaseBar(TimeSpan timePeriod, DateTime endTime)
         {
-            checkTimeArguments(timePeriod, endTime);
+            CheckTimeArguments(timePeriod, endTime);
             _timePeriod = timePeriod;
             _endTime = endTime;
             _beginTime = endTime.Subtract(timePeriod);
@@ -108,7 +108,7 @@ namespace TA4Net
          */
         public BaseBar(TimeSpan timePeriod, DateTime endTime, decimal openPrice, decimal highPrice, decimal lowPrice, decimal closePrice, decimal volume, decimal amount)
         {
-            checkTimeArguments(timePeriod, endTime);
+            CheckTimeArguments(timePeriod, endTime);
             _timePeriod = timePeriod;
             _endTime = endTime;
             _beginTime = endTime.Subtract(timePeriod);
@@ -266,7 +266,7 @@ namespace TA4Net
          * @param endTime the end time of the bar
          * @throws ArgumentException if one of the arguments is null
          */
-        private void checkTimeArguments(TimeSpan timePeriod, DateTime endTime)
+        private void CheckTimeArguments(TimeSpan timePeriod, DateTime endTime)
         {
             if (timePeriod == null)
             {

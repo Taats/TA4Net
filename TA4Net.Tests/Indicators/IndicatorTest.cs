@@ -22,12 +22,9 @@
  */
 namespace TA4Net.Test.Indicators
 {
-    using TA4Net;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
     using System;
     using TA4Net.Interfaces;
 
-    [TestClass]
     public class IndicatorTest<TType, TValues, TIndicatorValue>
     {
 

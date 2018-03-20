@@ -1291,7 +1291,7 @@ namespace TA4Net.Test.Indicators.pivotpoints
         }
 
         [TestMethod]
-        [Ignore] // DeMark is failing for these series, other series are good.
+       // [Ignore] // DeMark is failing for these series, other series are good.
         public void PivotPointTestDailyTimeFrame()
         {
             PivotPointIndicator pp = new PivotPointIndicator(series_5_minutes, TimeLevel.DAY);
@@ -1345,12 +1345,12 @@ namespace TA4Net.Test.Indicators.pivotpoints
             Assert.AreEqual(deMarkpp.GetValue(0), Decimals.NaN);
             Assert.AreEqual(deMarkR1.GetValue(0), Decimals.NaN);
             Assert.AreEqual(deMarkS1.GetValue(0), Decimals.NaN);
-            Assert.AreEqual(deMarkpp.GetValue(222), 170.735);
-            Assert.AreEqual(deMarkR1.GetValue(222), 172.66);
-            Assert.AreEqual(deMarkS1.GetValue(222), 169.81);
-            Assert.AreEqual(deMarkpp.GetValue(series_5_minutes.GetEndIndex()), 170.615);
-            Assert.AreEqual(deMarkR1.GetValue(series_5_minutes.GetEndIndex()), 172.63);
-            Assert.AreEqual(deMarkS1.GetValue(series_5_minutes.GetEndIndex()), 169.92);
+            Assert.AreEqual(deMarkpp.GetValue(222), 170.735M);
+            Assert.AreEqual(deMarkR1.GetValue(222), 172.66M);
+            Assert.AreEqual(deMarkS1.GetValue(222), 169.81M);
+            Assert.AreEqual(deMarkpp.GetValue(series_5_minutes.GetEndIndex()), 170.615M);
+            Assert.AreEqual(deMarkR1.GetValue(series_5_minutes.GetEndIndex()), 172.63M);
+            Assert.AreEqual(deMarkS1.GetValue(series_5_minutes.GetEndIndex()), 169.92M);
 
         }
 

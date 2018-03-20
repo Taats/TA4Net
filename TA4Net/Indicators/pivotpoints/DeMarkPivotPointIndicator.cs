@@ -55,10 +55,10 @@ namespace TA4Net.Indicators.PivotPoints
          * The user has to make sure that there are enough previous bars to Calculate correct pivots at the first bar that matters. For example for PIVOT_TIME_LEVEL_ID_MONTH
          * there will be only correct pivot point values (and reversals) after the first complete month
          */
-        public DeMarkPivotPointIndicator(ITimeSeries series, TimeLevel timeLevelId)
+        public DeMarkPivotPointIndicator(ITimeSeries series, TimeLevel timeLevel)
             : base(series)
         {
-            _timeLevel = timeLevelId;
+            _timeLevel = timeLevel;
         }
 
 
@@ -72,6 +72,7 @@ namespace TA4Net.Indicators.PivotPoints
         {
             if (barsOfPreviousPeriod.isEmpty())
                 return Decimals.NaN;
+
             IBar bar = TimeSeries.GetBar(barsOfPreviousPeriod[0]);
             decimal open = TimeSeries.GetBar(barsOfPreviousPeriod[barsOfPreviousPeriod.Count() - 1]).OpenPrice;
             decimal close = bar.ClosePrice;
@@ -146,7 +147,7 @@ namespace TA4Net.Indicators.PivotPoints
                 case TimeLevel.DAY: // return previous day
                     int prevCalendarDay = bar.EndTime.AddDays( -1).DayOfYear;
                     // skip weekend and holidays:
-                    while (TimeSeries.GetBar(indexOfPreviousBar).EndTime.Day != prevCalendarDay && indexOfPreviousBar > 0)
+                    while (TimeSeries.GetBar(indexOfPreviousBar).EndTime.DayOfYear != prevCalendarDay && indexOfPreviousBar > 0)
                     {
                         prevCalendarDay--;
                     }
@@ -164,8 +165,8 @@ namespace TA4Net.Indicators.PivotPoints
             switch (_timeLevel)
             {
                 case TimeLevel.DAY:
-                    //return bar.EndTime.DayOfYear;
-                    throw new NotImplementedException("Bugged, see github");
+                    return bar.EndTime.DayOfYear;
+                    //throw new NotImplementedException("Bugged, see github");
                 case TimeLevel.WEEK: 
                     return bar.EndTime.GetIso8601WeekOfYear();
                 case TimeLevel.MONTH:

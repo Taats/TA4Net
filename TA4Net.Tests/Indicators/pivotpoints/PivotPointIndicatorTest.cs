@@ -25,11 +25,13 @@ namespace TA4Net.Test.Indicators.pivotpoints
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using TA4Net;
     using TA4Net.Extensions;
     using TA4Net.Indicators.pivotpoints.Types;
     using TA4Net.Indicators.PivotPoints;
     using TA4Net.Interfaces;
+    using TA4Net.Tests.Extensions;
 
     [TestClass]
     public class PivotPointIndicatorTest
@@ -606,11 +608,11 @@ namespace TA4Net.Test.Indicators.pivotpoints
                 string[] barData = dataLine[i].Split(",");
                 DateTime dateZ = DateTime.Parse(barData[0] + " " + barData[1]);
                 DateTime date = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(dateZ, "Pacific Standard Time");
-                decimal open = decimal.Parse(barData[2]);
-                decimal high = decimal.Parse(barData[3]);
-                decimal low = decimal.Parse(barData[4]);
-                decimal close = decimal.Parse(barData[5]);
-                decimal volume = decimal.Parse(barData[6]);
+                decimal open = barData[2].ToDecimal();
+                decimal high = barData[3].ToDecimal();
+                decimal low = barData[4].ToDecimal();
+                decimal close = barData[5].ToDecimal();
+                decimal volume = barData[6].ToDecimal();
                 bars.Add(new BaseBar(date, open, high, low, close, volume));
             }
             series_5_minutes = new BaseTimeSeries("FB_5_minutes", bars);
@@ -800,11 +802,11 @@ namespace TA4Net.Test.Indicators.pivotpoints
             {
                 string[] barData = dataLine[i].Split(",");
                 DateTime date = DateTime.Parse(barData[0] + " " + barData[1]);
-                decimal open = decimal.Parse(barData[2]);
-                decimal high = decimal.Parse(barData[3]);
-                decimal low = decimal.Parse(barData[4]);
-                decimal close = decimal.Parse(barData[5]);
-                decimal volume = decimal.Parse(barData[6]);
+                decimal open = barData[2].ToDecimal();
+                decimal high = barData[3].ToDecimal();
+                decimal low = barData[4].ToDecimal();
+                decimal close = barData[5].ToDecimal();
+                decimal volume = barData[6].ToDecimal();
                 bars.Add(new BaseBar(date, open, high, low, close, volume));
             }
             series_1_hours = new BaseTimeSeries("FB_1_hours", bars);
@@ -977,11 +979,11 @@ namespace TA4Net.Test.Indicators.pivotpoints
             {
                 string[] barData = dataLine[i].Split(",");
                 DateTime date = DateTime.ParseExact(barData[0], "yyyy/MM/dd", null).Date;
-                decimal close = decimal.Parse(barData[1]);
-                decimal volume = decimal.Parse(barData[2]);
-                decimal open = decimal.Parse(barData[3]);
-                decimal high = decimal.Parse(barData[4]);
-                decimal low = decimal.Parse(barData[5]);
+                decimal close = barData[1].ToDecimal();
+                decimal volume = barData[2].ToDecimal();
+                decimal open = barData[3].ToDecimal();
+                decimal high = barData[4].ToDecimal();
+                decimal low = barData[5].ToDecimal();
                 bars.Add(new BaseBar(date, open, high, low, close, volume));
             }
             series_1_days = new BaseTimeSeries("FB_daily", bars);
@@ -1278,11 +1280,11 @@ namespace TA4Net.Test.Indicators.pivotpoints
             {
                 string[] barData = dataLine[i].Split(",");
                 DateTime date = DateTime.ParseExact(barData[0], "yyyy-MM-dd", null).Date;
-                decimal open = decimal.Parse(barData[1]);
-                decimal high = decimal.Parse(barData[2]);
-                decimal low = decimal.Parse(barData[3]);
-                decimal close = decimal.Parse(barData[4]);
-                decimal volume = decimal.Parse(barData[6]);
+                decimal open = barData[1].ToDecimal();
+                decimal high = barData[2].ToDecimal();
+                decimal low = barData[3].ToDecimal();
+                decimal close = barData[4].ToDecimal();
+                decimal volume = barData[6].ToDecimal();
                 bars.Add(new BaseBar(date, open, high, low, close, volume));
             }
             series_1_weeks = new BaseTimeSeries("FB_daily", bars);

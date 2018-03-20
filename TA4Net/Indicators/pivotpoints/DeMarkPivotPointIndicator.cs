@@ -163,14 +163,15 @@ namespace TA4Net.Indicators.PivotPoints
         {
             switch (_timeLevel)
             {
-                case TimeLevel.DAY: // return previous day
-                    // return bar.EndTime.DayOfYear;
+                case TimeLevel.DAY:
+                    //return bar.EndTime.DayOfYear;
                     throw new NotImplementedException("Bugged, see github");
-                case TimeLevel.WEEK: // return previous week
+                case TimeLevel.WEEK: 
                     return bar.EndTime.GetIso8601WeekOfYear();
-                case TimeLevel.MONTH: // return previous month
+                case TimeLevel.MONTH:
                     return bar.EndTime.Month;
-                default: return bar.EndTime.Year;
+                default:
+                    return bar.EndTime.Year;
             }
         }
 

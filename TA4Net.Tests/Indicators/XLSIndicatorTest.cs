@@ -60,7 +60,7 @@ namespace TA4Net.Test.Indicators
         {
             if (cachedSeries == null)
             {
-                cachedSeries = XlsTestsUtils.getSeries(type, fileName);
+                cachedSeries = XlsTestsUtils.GetSeries(type, fileName);
             }
             return cachedSeries;
         }
@@ -75,7 +75,7 @@ namespace TA4Net.Test.Indicators
          */
         public IIndicator<decimal> getIndicator(params object[] values)
         {
-            return XlsTestsUtils.getIndicator(type, fileName, column, values);
+            return XlsTestsUtils.GetIndicator(type, fileName, column, values);
         }
     }
 }

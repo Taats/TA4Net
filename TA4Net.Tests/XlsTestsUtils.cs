@@ -23,13 +23,13 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
-using TA4Net.Mocks;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using TA4Net;
 using TA4Net.Interfaces;
+using TA4Net.Mocks;
+using TA4Net.Tests.Extensions;
 
 namespace TA4Net.Test
 {
@@ -47,7 +47,7 @@ namespace TA4Net.Test
          * @throws IOException if the workbook constructor or close throws
          *             IOException
          */
-        private static ISheet getSheet(Type clazz, string fileName)
+        private static ISheet GetSheet(Type clazz, string fileName)
         {
             HSSFWorkbook workbook = new HSSFWorkbook(File.OpenRead(fileName));
             ISheet sheet = workbook[0];
@@ -66,7 +66,7 @@ namespace TA4Net.Test
          * @param params parameters to write
          * @throws DataFormatException if the parameters section header is not found
          */
-        private static void setParams(ISheet sheet, params decimal[] values)
+        private static void SetParams(ISheet sheet, params decimal[] values)
         {
             IFormulaEvaluator evaluator = sheet.Workbook.GetCreationHelper().CreateFormulaEvaluator();
             var iterator = sheet.GetRowEnumerator();
@@ -83,10 +83,6 @@ namespace TA4Net.Test
                 {
                     // stream parameters into the second column of subsequent rows
                     // overwrites data section if there is not a large enough gap
-                    //Arrays.stream(params)
-                    //    .mapToDouble(decimal::doubleValue)
-                    //    .forEach(d->iterator.next().getCell(1).setCellValue(d));
-
                     foreach (var val in values)
                     {
                         iterator.MoveNext();
@@ -109,10 +105,10 @@ namespace TA4Net.Test
          * @throws IOException if getSheet throws IOException
          * @throws DataFormatException if getSeries throws DataFormatException
          */
-        public static ITimeSeries getSeries(Type clazz, string fileName)
+        public static ITimeSeries GetSeries(Type clazz, string fileName)
         {
-            ISheet sheet = getSheet(clazz, fileName);
-            return getSeries(sheet);
+            ISheet sheet = GetSheet(clazz, fileName);
+            return GetSeries(sheet);
         }
 
         /**
@@ -125,12 +121,12 @@ namespace TA4Net.Test
          * @throws DataFormatException if getData throws DataFormatException or if
          *             the data contains empty cells
          */
-        private static ITimeSeries getSeries(ISheet sheet)
+        private static ITimeSeries GetSeries(ISheet sheet)
         {
             ITimeSeries series = new BaseTimeSeries();
             IFormulaEvaluator evaluator = sheet.Workbook.GetCreationHelper().CreateFormulaEvaluator();
             TimeSpan weekDuration = new TimeSpan(7, 0, 0, 0);
-            List<IRow> rows = getData(sheet);
+            List<IRow> rows = GetData(sheet);
             // parse the rows from the data section
             foreach (IRow row in rows)
             {
@@ -146,14 +142,13 @@ namespace TA4Net.Test
                 }
                 // build a bar from the row and add it to the series
                 DateTime weekEndDate = DateUtil.GetJavaDate(cellValues[0].NumberValue);
-            //    DateTime weekEndDateTime = DateTime.ofInstant(Instant.ofEpochMilli(weekEndDate.Time .getTime()));
-                IBar bar = new BaseBar(weekDuration, weekEndDate, // weekEndDateTime,
+                IBar bar = new BaseBar(weekDuration, weekEndDate,
                         // open, high, low, close, volume
-                       decimal.Parse(cellValues[1].FormatAsString()),
-                       decimal.Parse(cellValues[2].FormatAsString()),
-                       decimal.Parse(cellValues[3].FormatAsString()),
-                       decimal.Parse(cellValues[4].FormatAsString()),
-                       decimal.Parse(cellValues[5].FormatAsString()));
+                       cellValues[1].FormatAsString().ToDecimal(),
+                       cellValues[2].FormatAsString().ToDecimal(),
+                       cellValues[3].FormatAsString().ToDecimal(),
+                       cellValues[4].FormatAsString().ToDecimal(),
+                       cellValues[5].FormatAsString().ToDecimal());
                 series.AddBar(bar);
             }
             return series;
@@ -169,14 +164,10 @@ namespace TA4Net.Test
          * @return List<decimal> of values from the column
          * @throws DataFormatException if getValues returns DataFormatException
          */
-        private static List<decimal> getValues(ISheet sheet, int column, params object[] values)
+        private static List<decimal> GetValues(ISheet sheet, int column, params object[] values)
         {
-            //decimal[] decimalParams = Arrays.stream(params)
-            //        .map(p->Decimals.valueOf(p.ToString()))
-            //        .toArray(decimal[]::new);
-            var decimalParams = values.Select(_ => decimal.Parse(_.ToString())).ToArray();
-
-            return getValues(sheet, column, decimalParams);
+            var decimalParams = values.Select(_ => _.ToString().ToDecimal()).ToArray();
+            return GetValues(sheet, column, decimalParams);
         }
 
         /**
@@ -191,10 +182,10 @@ namespace TA4Net.Test
          * @throws DataFormatException if setParams or getValues throws
          *             DataFormatException
          */
-        private static List<decimal> getValues(ISheet sheet, int column, params decimal[] values)
+        private static List<decimal> GetValues(ISheet sheet, int column, params decimal[] values)
         {
-            setParams(sheet, values);
-            return getValues(sheet, column);
+            SetParams(sheet, values);
+            return GetValues(sheet, column);
         }
 
         /**
@@ -206,12 +197,12 @@ namespace TA4Net.Test
          * @return List<decimal> of values from the column
          * @throws DataFormatException if getData throws DataFormatException
          */
-        private static List<decimal> getValues(ISheet sheet, int column)
+        private static List<decimal> GetValues(ISheet sheet, int column)
         {
             List<decimal> values = new List<decimal>();
             IFormulaEvaluator evaluator = sheet.Workbook.GetCreationHelper().CreateFormulaEvaluator();
             // get all of the data from the data section of the sheet
-            List<IRow> rows = getData(sheet);
+            List<IRow> rows = GetData(sheet);
             foreach (IRow row in rows)
             {
                 // skip rows where the first cell is empty
@@ -234,14 +225,14 @@ namespace TA4Net.Test
          * @return List<Row> of the data rows
          * @throws DataFormatException if the data section header is not found.
          */
-        private static List<IRow> getData(ISheet sheet)
+        private static List<IRow> GetData(ISheet sheet)
         {
             IFormulaEvaluator evaluator = sheet.Workbook.GetCreationHelper().CreateFormulaEvaluator();
             var iterator = sheet.GetRowEnumerator();
             bool noHeader = true;
             List<IRow> rows = new List<IRow>();
             // iterate through all rows of the sheet
-            while (iterator.MoveNext()) // HasNext
+            while (iterator.MoveNext())
             {
                 IRow row = iterator.Current as IRow;
                 // skip rows with an empty first cell
@@ -286,10 +277,10 @@ namespace TA4Net.Test
          * @throws DataFormatException if getSeries or getValues throws
          *             DataFormatException
          */
-        public static IIndicator<decimal> getIndicator(Type clazz, string fileName, int column, params object[] values)
+        public static IIndicator<decimal> GetIndicator(Type clazz, string fileName, int column, params object[] values)
         {
-            ISheet sheet = getSheet(clazz, fileName);
-            return new MockIndicator(getSeries(sheet), getValues(sheet, column, values));
+            ISheet sheet = GetSheet(clazz, fileName);
+            return new MockIndicator(GetSeries(sheet), GetValues(sheet, column, values));
         }
 
         /**
@@ -305,10 +296,10 @@ namespace TA4Net.Test
          * @throws IOException if getSheet throws IOException
          * @throws DataFormatException if getValues throws DataFormatException
          */
-        public static decimal getreadonlyCriterionValue(Type clazz, string fileName, int column, params object[] objects)
+        public static decimal GetreadonlyCriterionValue(Type clazz, string fileName, int column, params object[] objects)
         {
-            ISheet sheet = getSheet(clazz, fileName);
-            List<decimal> values = getValues(sheet, column, objects);
+            ISheet sheet = GetSheet(clazz, fileName);
+            List<decimal> values = GetValues(sheet, column, objects);
             return values[values.Count - 1];
         }
 
@@ -322,10 +313,10 @@ namespace TA4Net.Test
          * @throws IOException if getSheet throws IOException
          * @throws DataFormatException if getValues throws DataFormatException
          */
-        public static ITradingRecord getTradingRecord(Type clazz, string fileName, int column)
+        public static ITradingRecord GetTradingRecord(Type clazz, string fileName, int column)
         {
-            ISheet sheet = getSheet(clazz, fileName);
-            return new MockTradingRecord(getValues(sheet, column));
+            ISheet sheet = GetSheet(clazz, fileName);
+            return new MockTradingRecord(GetValues(sheet, column));
         }
 
     }
